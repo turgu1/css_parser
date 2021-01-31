@@ -1,0 +1,325 @@
+/* Augusta Cancellaresca Std */
+
+@font-face {
+  font-family: "Augusta Cancellaresca Std";
+  font-style: normal;
+  font-weight: normal;
+  src : url("../fonts/AugustaCancellarescaStd-Reg.otf");
+  }
+  
+  
+  body, div, h1, h2, h3, h4, h5, h6, p {
+    widows: 2;
+    orphans: 2;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    font-style: normal;
+    text-align: left;
+    page-break-after: avoid;
+  }
+  i {
+    font-style: italic;
+  }
+  b {
+    font-weight: bold;
+  }
+  ol,ul{
+    margin: 0;
+    padding: 0 0 0 1.75em;
+    border: 0;
+    outline: 0;
+  }
+  li{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+  }
+  table {
+    width: 100%;
+  }
+  img, div, blockquote, aside {
+    padding: 0;
+    margin: 0;
+  }
+  aside{
+    display:block;
+  }
+  blockquote {
+    display:block;
+  }
+  cite {
+    font-style:inherit;
+  }
+  figure {
+    display: block;
+    padding: 0;
+    margin: 0;
+    page-break-inside: avoid;
+  }
+  figcaption {
+    display: block;
+    padding: 0;
+    margin: 0;
+  }
+  div.h100 {
+    text-align: center;
+    height: 100%;
+    height: 95vh;
+    max-height: 100%;
+    max-width: 100%;
+    clear: both;
+  }
+  img.h100 {
+    height: 100%;
+    max-width: 100%;
+  }
+  div.w100 {
+    text-align: center;
+    max-height: 100%;
+    width: 100%;
+    clear: both;
+  }
+  div.w100-10 {
+    text-align: center;
+    max-height: 100%;
+    width: 100%;
+    clear: both;
+    margin: 10% 0 0 0;
+  }
+  img.w100 {
+    max-height: 100%;
+    width: 100%;
+  }
+  img.h1em {
+    height: 1em;
+  }
+  img.h1em-DC {
+    height: 3em;
+    float: left;
+      padding: 0 .15em 0 0;
+  }
+  img.h2em {
+    height: 2em;
+  }
+  img.h4em {
+    height: 4em;
+  }
+  div.footnote {
+    margin-top: 15%;
+  }
+  hr.transition{
+    display: block;
+    border: none;
+    margin: 0;
+  }
+  a{
+    color:#4c7aa9;
+  }
+  h1.x01-FM-Ad-Card-Head {
+    font-family: "P22 Alpha Roman Pro", "Georgia", serif;
+    font-size:0.75em;
+    margin: 5% 0 1.56em 0;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x01-FM-Ad-Card-List {
+    font-family: "FCaslon Thirty ITC Std", "Georgia", serif;
+    font-size:0.92em;
+    font-style:italic;
+    margin: 0;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x01-FM-Copyright-Text {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:0.62em;
+    margin: 0;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x01-FM-Copyright-Text-Half-Space {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:0.62em;
+    margin: 0.67em 0 0 0;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x01-FM-Copyright-Text-Space {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:0.62em;
+    margin: 1.2em 0 0 0;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x01-FM-Dedi-Body {
+    font-family: "FCaslon Thirty ITC Std", "Georgia", serif;
+    font-size:1em;
+    margin: 0;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x01-FM-Dedi-Body-First {
+    font-family: "FCaslon Thirty ITC Std", "Georgia", serif;
+    font-size:1em;
+    margin: 15% 0 0 0;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x01-FM-Epigraph-FL {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:0.94em;
+    margin: 0 7%;
+    text-indent:0;
+  }
+  p.x01-FM-Epigraph-Indent {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:0.94em;
+    margin: 0 7%;
+    text-indent:3%;
+  }
+  p.x01-FM-Epigraph-Orn {
+    font-family: "Minion Pro", "Georgia", serif;
+    font-size:1em;
+    margin: 1.5em 0 0 0;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x01-FM-Epigraph-Orn-First {
+    font-family: "Minion Pro", "Georgia", serif;
+    font-size:1em;
+    margin: 10% 0 1.5em 0;
+    text-align:center;
+    text-indent:0;
+  }
+  /*May want to look at the style below*/
+  p.x03-CO-Body-Text {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:1.02em;
+    margin: 0;
+    text-indent:0;
+  }
+  h1.x03-Chapter-Number {
+    font-family: "P22 Alpha Roman Pro", "Georgia", serif;
+    font-size:0.79em;
+    margin: 15% 0 0 0;
+    page-break-after:avoid;
+    text-align:center;
+    text-indent:0;
+  }
+  h1.x03-Chapter-Title {
+    font-family: "P22 Operina Romano", "Augusta Cancellaresca Std", "Georgia", serif;
+    font-size:1.67em;
+    margin: 0.5em 0 10% 0;
+    page-break-after:avoid;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x04-Body-Text {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:1.02em;
+    margin: 0;
+    text-indent:1.14em;
+  }
+  p.x04-Body-Text-FL {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:1.02em;
+    margin: 0;
+    text-indent:0;
+  }
+  p.x04-Space-Break-FL {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:1.02em;
+    margin: 0;
+    text-indent:0;
+  }
+  div.x04-Space-Break-Orn {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:1em;
+    margin: 1.2em 0;
+    page-break-after:avoid;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x06-Song-Lyric-First {
+    font-family: "FCaslon Thirty ITC Std", "Georgia", serif;
+    font-size:0.92em;
+    font-style:italic;
+    margin: 1.64em 0 0 4.27em;
+    text-indent:-1em;
+  }
+  p.x06-Song-Lyric-Last {
+    font-family: "FCaslon Thirty ITC Std", "Georgia", serif;
+    font-size:0.92em;
+    font-style:italic;
+    margin: 0 0 1.64em 4.27em;
+    text-indent:-1em;
+  }
+  p.x13-BM-Ack {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:0.96em;
+    margin: 0;
+    text-indent:1.22em;
+  }
+  p.x13-BM-Ack-FL {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size:0.96em;
+    margin: 0;
+    text-indent:0;
+  }
+  h1.x13-BM-Ack-Head {
+    font-family: "P22 Operina Romano", "Augusta Cancellaresca Std", "Georgia", serif;
+    font-size:1.5em;
+    margin: 15% 0 10% 0;
+    page-break-after:avoid;
+    text-align:center;
+    text-indent:0;
+  }
+  span.SCAP {
+    font-size: .7em;
+  }
+  h1.x13-BM-About-Au-Head {
+    font-family: "P22 Operina Romano", "Augusta Cancellaresca Std", "Georgia", serif;
+    font-size:1.5em;
+    margin: 15% 0 10% 0;
+    page-break-after:avoid;
+    text-align:center;
+    text-indent:0;
+  }
+  p.x13-BM-About-Au {
+    font-family: "Garamond MT Std", "Georgia", serif;
+    font-size: 1.02em;
+    margin: 1.5em 0 0 0;
+    text-indent: 0em;
+  }
+  .x01-FM-Contents-FL {
+    font-size: 1.02em;
+    font-family: "Garamond MT Std", "Georgia", serif;
+    margin: 0 0 0 1.5em;
+    text-indent:-1.5em;
+  }
+  .x01-FM-Contents-Center {
+    font-size: 1.02em;
+    font-family: "Garamond MT Std", "Georgia", serif;
+    text-align:center;
+    margin: 0;
+    text-indent:0em;
+  }
+  .x01-FM-Contents-Space {
+    font-size: 1.02em;
+    font-family: "Garamond MT Std", "Georgia", serif;
+    margin: 1em 0 0 1.5em;
+    text-indent:-1.5em;
+  }
+  h1.x01-FM-Head {
+    font-family: "P22 Operina Romano", "Augusta Cancellaresca Std", "Georgia", serif;
+    font-size:1.75em;
+    margin: 15% 0 10% 0;
+    page-break-after:avoid;
+    text-align:center;
+    text-indent:0;
+  }
+  .Contents-Section {
+    margin: 0 0 0 1.5em;
+  }

@@ -1,0 +1,401 @@
+body
+{
+    margin-left:1.15%;
+    margin-right:25px;
+}
+.bk-title
+{
+    font-size: small;
+    margin-top: 1em;
+    margin-bottom: 0em;
+    margin-left: 3em;
+    text-indent: 0em;
+    text-align:center;
+}
+p.part-h
+{
+    font-size: small;
+    margin-top: 0em;
+    margin-bottom: 0em;  
+    text-indent: 0em;
+    text-align:center;
+}
+p.authorname
+{
+    font-size: 100%;
+    margin-top: 10em;
+    margin-bottom: 0em;
+    margin-left: 0em;
+    text-align:center;
+}
+.publisher1
+{
+    font-size: x-small;
+    font-weight:normal;
+    margin-top: 3em;
+    margin-bottom: 0em;
+    margin-left: 0em;
+    text-align: center;
+    
+}
+.publisher
+{
+    font-size: 78%;
+    font-weight:normal;
+    margin-top: 0.5em;
+    margin-bottom: 0em;
+    margin-left: 0em;
+    text-align: center;
+    
+}
+p.copyright
+{
+    font-size:x-small;
+    margin-top: 1em;
+    margin-bottom: 0em;
+    margin-left:0em;
+    text-align: left;
+    
+}
+p.copyright1
+{
+    font-size:x-small;
+    margin-top: 2em;
+    margin-bottom: 0em;
+    margin-left:0em;
+    text-indent:0em;
+    text-align: left;
+    
+}
+p.copyright2
+{
+    font-size:x-small;
+    margin-top: 6em;
+    margin-bottom: 0em;
+    margin-left:0em;
+    text-align: left;
+}
+p.toc-title
+{
+    font-size: 130%;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    text-indent:0em;
+    text-align: left;
+}
+p.fm-title
+{
+    font-size: 130%;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    text-indent:0em;
+    text-align: left;
+}
+p.bm-title
+{
+    font-size: 130%;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    text-indent:0em;
+    text-align: left;
+}
+p.chapter-h
+{
+    font-size: 85%;
+    margin-top: 3em;
+    margin-bottom: 0em;
+    text-indent:0em;
+    text-align: left;
+}
+p.chap-title
+{
+    font-size: 130%;
+    margin-top: 0.5em;
+    margin-bottom: 2em;
+    text-indent:0em;
+    text-align: left;
+}
+p.section-1
+{
+    font-size: 100%;
+    font-weight: bold;
+    margin-top: 1.5em;
+    margin-bottom: 0em;  
+    text-indent: 0em;
+    text-align:left;
+}
+p.section-2
+{
+    font-size: 90%;
+    font-style:italic;
+    font-weight:bold;
+    margin-top: 1em;
+    margin-bottom: 0em;  
+    text-indent: 0em;
+    text-align:left;
+}
+p.section-2a
+{
+    font-size: 80%;
+    font-style:italic;
+    font-weight:bold;
+    margin-top: 1em;
+    margin-bottom: 0em;  
+    margin-left: 0em;  
+    text-indent: 0em;
+    text-align:left;
+}
+p.center2
+{
+
+    font-size: small;
+    font-weight:bold;
+    margin-top: 1em;
+    margin-bottom: 0em;
+    margin-left: 0em;
+    text-align: center;
+    
+}
+p.normal
+{
+
+    font-size: small;
+    margin-top: 1em;
+    margin-bottom: 0em;
+    margin-left: 0em;
+    text-align: left;
+
+}
+p.normal1
+{
+
+    font-size: small;
+    margin-top: 0em;
+    margin-bottom: 0em;
+    margin-left: 0em;
+    text-align: left;
+
+}
+p.bxindent-b
+{
+    font-size: 80%;
+    margin-top: 0em;
+    margin-bottom: 0em;
+    margin-left:1.5em;
+    text-align: left;
+    text-indent: -1.5em;
+}
+p.box-head
+{
+    font-size: small;
+    font-weight:bold;
+    margin-top: 0.5em;
+    margin-bottom: 0.25em;  
+    text-indent: 0em;
+    text-align:left;
+}
+p.indent
+{
+
+    font-size: small;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    margin-left: 0em;
+    text-indent:1em;
+    text-align: left;
+
+}
+p.indent1
+{
+
+    font-size: small;
+    margin-top: 1em;
+    margin-bottom: 0.1em;
+    margin-left: 0em;
+    text-indent:1.3em;
+    text-align: left;
+}
+p.indent2
+{
+    font-size: small;
+    margin-top: 2em;
+    margin-bottom: 0.1em;
+    margin-left: 0em;
+    text-indent:1.3em;
+    text-align: left;
+}
+p.indent-b
+{
+    font-size: small;
+    margin-top: 0em;
+    margin-bottom: 0em;
+    margin-left: 1.5em;
+    text-indent:-1.5em;
+    text-align: left;
+
+}
+p.indent-b1
+{
+    font-size: small;
+    margin-top: 1em;
+    margin-bottom: 0em;
+    margin-left: 1.5em;
+    text-indent:-1.5em;
+    text-align: left;
+
+}
+p.normal-b
+{
+    font-size: small;
+    margin-top: 0em;
+    margin-bottom: 0em;
+    margin-left: 1.2em;
+    text-indent:-1.2em;
+    text-align: left;
+}
+p.normal-b1
+{
+    font-size: small;
+    margin-top: 1em;
+    margin-bottom: 0em;
+    margin-left: 1.2em;
+    text-indent:-1.2em;
+    text-align: left;
+}
+div.boxnote
+{
+    margin-top:1em;
+    margin-bottom:1em;
+    border: 0.10em solid #000000;
+    background-color:#FFFDDF;
+    padding-top:1em;
+    padding-bottom:1em;
+    padding-left:1em;
+    padding-right:1em;
+}
+.image-center
+{
+
+    margin-left:0em;
+    margin-right:0em;
+    margin-top:1em;
+    margin-bottom:0em;
+    text-align:center;
+}
+p.caption
+{
+    font-size: 85%;
+    margin-top:1em;
+    margin-bottom:0em;
+    margin-left: 0em;
+    text-indent:0em;
+    text-align:left;
+    line-height:2em;
+}
+
+.line1
+{
+    border-bottom: solid #000000 1px;
+}
+sup
+{
+    font-size:75%;
+    
+}
+.svg
+{
+    max-width:100%;
+    max-height:100%;
+}
+a
+{
+  text-decoration:none;
+}
+
+.box-normal
+{
+ 
+    font-size: small;
+    margin-top: 1em;
+    margin-bottom: 0.1em;
+    margin-left: 0em;
+    text-indent:0em;
+    text-align: left;
+
+}
+.box-indent
+{
+ 
+    font-size: small;
+    margin-top: 0em;
+    margin-bottom: 0em;
+    margin-left: 0em;
+    text-indent:1.3em;
+    text-align: left;
+}
+
+
+div.full-width-image
+{
+        page-break-inside:avoid;
+	margin-top:0.5em;
+	margin-bottom:0.5em;
+	text-align:center;
+        height:90%;
+}
+i
+{
+font-style:italic;
+}
+p.index
+{
+
+    font-size: small;
+    margin-top: 0.1em;
+    margin-bottom: 0.1em;
+    margin-left: 1em;
+    text-indent:-1em;
+    text-align: justify;
+
+}
+p.index1
+{
+    font-size: small;
+    margin-top: 1em;
+    margin-bottom: 0.1em;
+    margin-left: 1em;
+    text-indent:-1em;
+    text-align: justify;
+
+}
+table
+{
+    font-size:small;    
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+    margin-left: 0em;
+    text-align: left;
+}
+.table-txt
+{
+    font-size: small;
+    margin-top: 0.5em;
+    margin-bottom: 0em;
+    margin-left: 0em;
+    text-align: left;
+}
+.tab-topspace
+{
+    margin-top: 1em;
+    margin-bottom: 0em;
+    text-indent: 0em;
+    text-align: left;
+}
+
+div.full-width-image1
+{
+        page-break-inside:avoid;
+	margin-top:0.5em;
+	margin-bottom:0.5em;
+	text-align:center;
+}

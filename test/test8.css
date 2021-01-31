@@ -1,0 +1,852 @@
+
+.para-acl {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.14em;
+	line-height : inherit;
+	margin-top : 0.43em;
+	text-align : center;
+	margin-bottom : 0.2em;
+}
+
+.para-acmh-ac-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.14em;
+	line-height : inherit;
+	margin-bottom : 0;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-acmh {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.14em;
+	line-height : inherit;
+	margin-bottom : 2.29em;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-art {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 2.6em;
+	text-align : justify;
+	margin-bottom : 0.2em;
+}
+
+.para-art-sup-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	text-align : left;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-ataf {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	text-align : justify;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-atat-ata-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-bottom : 0px;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-au {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 2.44em;
+	line-height : inherit;
+	text-align : center;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-bib {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	text-indent : -4.7%;
+	margin-left : 4.7%;
+	text-align : justify;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-bmepiv {
+	font-style : italic;
+	font-size : 1.02em;
+	line-height : inherit;
+	text-indent : -4.8%;
+	margin-left : 29%;
+	margin-right : 7.5%;
+	text-align : left;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-bmepivf {
+	font-style : italic;
+	font-size : 1.02em;
+	line-height : inherit;
+	margin-top : 0.95em;
+	text-indent : -4.8%;
+	margin-left : 29%;
+	margin-right : 7.5%;
+	text-align : left;
+	margin-bottom : 0.2em;
+}
+
+.para-bmepivl {
+	font-style : italic;
+	font-size : 1.02em;
+	line-height : inherit;
+	text-indent : -4.8%;
+	margin-left : 29%;
+	margin-right : 7.5%;
+	text-align : left;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-bmeps {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	margin-top : 0.9em;
+	text-align : center;
+	margin-bottom : 0.2em;
+}
+
+.para-bmh1 {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 2.1em;
+	margin-bottom : 0.7em;
+	text-indent : -4.7%;
+	margin-left : 4.7%;
+	text-align : justify;
+}
+
+.para-bmp {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	text-indent : 4.7%;
+	text-align : justify;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-bmpf {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 2.6em;
+	text-align : justify;
+	margin-bottom : 0.2em;
+}
+
+.para-bmpf-alt {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 2.6em;
+	text-align : justify;
+	margin-bottom : 0.2em;
+}
+
+.para-bmt-ack-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.46em;
+	line-height : inherit;
+	margin-bottom : 0px;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-bmt-bib-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.46em;
+	line-height : inherit;
+	margin-bottom : 0px;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-bmt-bm-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.46em;
+	line-height : inherit;
+	margin-bottom : 0px;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-bmt-cre-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.46em;
+	line-height : inherit;
+	margin-bottom : 0px;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-bmt-idx-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.46em;
+	line-height : inherit;
+	margin-bottom : 0px;
+	text-align : center;
+	margin-top : 0px;
+}
+
+.para-cepi {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 1.3em;
+	margin-left : 7.5%;
+	margin-right : 7.5%;
+	text-align : center;
+	margin-bottom : 0.2em;
+}
+
+.para-cepif {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-left : 7.5%;
+	margin-right : 7.5%;
+	text-align : center;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-ceps {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	margin-top : 0.86em;
+	text-align : center;
+	margin-bottom : 0.2em;
+}
+
+.para-cip {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	text-align : center;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-cipf {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	margin-top : 0.44em;
+	text-align : center;
+	margin-bottom : 0.2em;
+}
+
+.para-cit {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	text-align : center;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-cn-chap-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-bottom : 1.6em;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-crt {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	text-align : center;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-crtf {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	margin-top : 0.44em;
+	text-align : center;
+	margin-bottom : 0.2em;
+}
+
+.para-crtf-crt-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	margin-top : 0.44em;
+	text-align : center;
+	margin-bottom : 0.2em;
+}
+
+.para-ct {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.46em;
+	line-height : inherit;
+	margin-bottom : 0px;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-dedf-ded-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	text-align : center;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-extf {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 1.3em;
+	text-indent : 4.7%;
+	margin-left : 4.7%;
+	margin-right : 4.7%;
+	text-align : justify;
+	margin-bottom : 0.2em;
+}
+
+.para-extl {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-bottom : 1.3em;
+	text-indent : 4.7%;
+	margin-left : 4.7%;
+	margin-right : 4.7%;
+	text-align : justify;
+	margin-top : 0em;
+}
+
+.para-exts {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 1.3em;
+	margin-bottom : 1.3em;
+	text-indent : 4.7%;
+	margin-left : 4.7%;
+	margin-right : 4.7%;
+	text-align : justify;
+}
+
+.para-extv {
+	font-style : italic;
+	font-size : 1em;
+	line-height : inherit;
+	text-indent : -4.7%;
+	margin-left : 14.1%;
+	margin-right : 9.4%;
+	text-align : left;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-extvf {
+	font-style : italic;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 1.3em;
+	text-indent : -4.7%;
+	margin-left : 14.1%;
+	margin-right : 9.4%;
+	text-align : left;
+	margin-bottom : 0.2em;
+}
+
+.para-extvl {
+	font-style : italic;
+	font-size : 1em;
+	line-height : inherit;
+	margin-bottom : 1.3em;
+	text-indent : -4.7%;
+	margin-left : 14.1%;
+	margin-right : 9.4%;
+	text-align : left;
+	margin-top : 0em;
+}
+
+.para-fmepif {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-left : 7.5%;
+	margin-right : 7.5%;
+	text-align : center;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-fmeps {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	margin-top : 0.82em;
+	text-align : center;
+	margin-bottom : 0.2em;
+}
+
+.para-fmp {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	text-indent : 4.7%;
+	text-align : justify;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-fmp-alt {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	text-indent : 4.7%;
+	text-align : justify;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-fmpf {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 2.6em;
+	text-align : justify;
+	margin-bottom : 0.2em;
+}
+
+.para-fmt-in-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.46em;
+	line-height : inherit;
+	margin-bottom : 0px;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-fmt-toc-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1.46em;
+	line-height : inherit;
+	margin-bottom : 0px;
+	text-align : center;
+	margin-top : 0px;
+}
+
+.para-htit-htit-pg {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	text-align : center;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-imp {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 5em;
+	text-align : center;
+	margin-bottom : 0.2em;
+}
+
+.para-in {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	text-indent : -4.7%;
+	margin-left : 4.7%;
+	text-align : left;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-in1 {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	text-indent : -2.8%;
+	margin-left : 4.7%;
+	text-align : left;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-inf {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	margin-top : 1.14em;
+	text-align : left;
+	margin-bottom : 0.2em;
+}
+
+.para-nl {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	text-indent: 1em;
+	line-height : inherit;
+	text-align : left;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-p {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	text-indent : 4.7%;
+	text-align : justify;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-p-alt {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	text-indent : 4.7%;
+	text-align : justify;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-pcon {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	text-align : justify;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-pf {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	margin-top : 2.6em;
+	text-align : justify;
+	margin-bottom : 0.2em;
+}
+
+.para-pub {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 1em;
+	line-height : inherit;
+	text-align : center;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-socmed {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.9em;
+	line-height : inherit;
+	margin-top : 1.45em;
+	text-align : center;
+	margin-bottom : 0.2em;
+}
+
+.para-tit-tit-pg {
+	font-size : 3em;
+	line-height : inherit;
+	margin-bottom : 0.4em;
+	text-align : center;
+	margin-top : 0em;
+}
+
+.para-toc {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.98em;
+	line-height : inherit;
+	margin-top : 0.67em;
+	text-align : left;
+	margin-bottom : 0.2em;
+}
+
+.para-tocbm {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.98em;
+	line-height : inherit;
+	margin-left : 26.9%;
+	text-align : left;
+	margin-bottom : 0.2em;
+	margin-top : 0em;
+}
+
+.para-tocbm-alt {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.98em;
+	line-height : inherit;
+	margin-top : 1.08em;
+	margin-left : 26.9%;
+	text-align : left;
+	margin-bottom : 0.2em;
+}
+
+.para-tocfm {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.98em;
+	line-height : inherit;
+	margin-top : 1em;
+	margin-bottom : 1.16em;
+	margin-left : 26.9%;
+	text-align : left;
+}
+
+.char-au-sc {
+	font-size : 1.87em;
+}
+
+.char-ccust1 {
+}
+
+.char-ccust2 {
+}
+
+.char-ccust3 {
+	font-size : 3em;
+}
+
+.char-ccust4 {
+}
+
+.char-ceps-i {
+	font-style : italic;
+	font-size : 0.77em;
+}
+
+.char-ceps-sc {
+	font-size : 0.85em;
+}
+
+.char-cf {
+	font-style : italic;
+	font-size : 0.98em;
+}
+
+.char-dropcap {
+	font-size : 3em;
+}
+
+.char-first {
+	font-weight : normal;
+	font-style : normal;
+}
+
+.char-fmeps-sc {
+	font-size : 0.81em;
+}
+
+.char-htit-sc {
+	font-size : 0.81em;
+}
+
+.char-i {
+	font-style : italic;
+}
+
+.char-sc {
+	font-weight : normal;
+	font-style : normal;
+}
+
+.char-tit-sc {
+	font-size : 3em;
+	line-height : inherit;
+}
+
+.char-toc-sc {
+	font-weight : normal;
+	font-style : normal;
+	font-size : 0.81em;
+}
+
+.char-url {
+	font-weight : normal;
+	font-style : normal;
+}
+
+.char-dropcap-DC::first-letter {
+	font-size : 3em;
+}
+
+.squeeze39 {margin: 0 30.5%; }
+.squeeze43 {margin: 0 28.5%; }
+.squeeze44 {margin: 0 28%; }
+.squeeze46 {margin: 0 27%; }
+.squeeze49 {margin: 0 25.5%; }
+.squeeze53 {margin: 0 23.5%; }
+.squeeze54 {margin: 0 23%; }
+.squeeze55 {margin: 0 22.5%; }
+.squeeze78 {margin: 0 11%; }
+.squeeze80 {margin: 0 10%; }
+.squeeze81 {margin: 0 9.5%; }
+.squeeze85 {margin: 0 7.5%; }
+.squeeze88 {margin: 0 6%; }
+.squeeze91 {margin: 0 4.5%; }
+.squeeze93 {margin: 0 3.5%; }
+.squeeze96 {margin: 0 2%; }
+.squeeze97 {margin: 0 1.5%; }
+.squeeze99 {margin: 0 0.5%; }
+
+span.long-dash{
+	letter-spacing: -0.1em;
+}
+
+div.rb-atat-ata-pg {
+	line-height:0px;
+	border-top-style: double;
+	border-top-width:6px;
+	margin-left:45%;
+	margin-right:45%;
+	margin-top:1.5em;
+	margin-bottom:4em;
+}
+div.rb-bmt-ack-pg {
+	line-height:0px;
+	border-top-style: double;
+	border-top-width:6px;
+	margin-left:45%;
+	margin-right:45%;
+	margin-top:0.7em;
+	margin-bottom:1.78em;
+}
+div.rb-bmt-bib-pg {
+	line-height:0px;
+	border-top-style: double;
+	border-top-width:6px;
+	margin-left:45%;
+	margin-right:45%;
+	margin-top:0.7em;
+	margin-bottom:1.78em;
+}
+div.rb-bmt-bm-pg {
+	line-height:0px;
+	border-top-style: double;
+	border-top-width:6px;
+	margin-left:45%;
+	margin-right:45%;
+	margin-top:0.7em;
+	margin-bottom:1.78em;
+}
+div.rb-bmt-cre-pg {
+	line-height:0px;
+	border-top-style: double;
+	border-top-width:6px;
+	margin-left:45%;
+	margin-right:45%;
+	margin-top:0.7em;
+	margin-bottom:1.78em;
+}
+div.rb-ct {
+	line-height:0px;
+	border-top-style: double;
+	border-top-width:6px;
+	margin-left:45%;
+	margin-right:45%;
+	margin-top:0.7em;
+	margin-bottom:1.78em;
+}
+div.rb-fmt-in-pg {
+	line-height:0px;
+	border-top-style: double;
+	border-top-width:6px;
+	margin-left:45%;
+	margin-right:45%;
+	margin-top:0.7em;
+	margin-bottom:1.78em;
+}
+
+.fb_0 {margin-left:0; margin-right:0em }
+.fb_5 {margin-left:5%; margin-right:0em }
+.cso_7 {font-size:0.7em }
+.cso_9 {font-size:0.9em }
+.cso_30 {font-size:3em }
+.cso_30-DC::first-letter {font-size:3em }
