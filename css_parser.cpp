@@ -751,14 +751,14 @@ class CSSParser
 
     bool is_logical_diadic_op() {
       return (token == Token::IDENT) && 
-             ((strcmp(ident, "and") == 0) ||
-              (strcmp(ident, "or" ) == 0));      
+             ((strcmp((char *)ident, "and") == 0) ||
+              (strcmp((char *)ident, "or" ) == 0));      
     }
 
     bool is_logical_monadic_op() {
       return (token == Token::IDENT) &&
-             ((strcmp(ident, "only") == 0) ||
-              (strcmp(ident, "not" ) == 0));
+             ((strcmp((char *)ident, "only") == 0) ||
+              (strcmp((char *)ident, "not" ) == 0));
     }
 
     bool media_statement() {
