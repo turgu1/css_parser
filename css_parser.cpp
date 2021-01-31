@@ -452,6 +452,10 @@ class CSSParser
     }
 
     bool function() {
+      skip_blanks();
+      expression();
+      if (token == Token::RPARENT) skip_blanks();
+      else return false;
       return true;
     }
 
@@ -835,7 +839,7 @@ bool do_file(const char * filename) {
   }
 }
 
-const int FILE_COUNT = 8;
+const int FILE_COUNT = 9;
 
 const char * files[FILE_COUNT] = {
   "test/test1.css",
@@ -846,6 +850,7 @@ const char * files[FILE_COUNT] = {
   "test/test6.css",
   "test/test7.css",
   "test/test8.css",
+  "test/test9.css",
 };
 
 int main() {
