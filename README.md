@@ -7,5 +7,8 @@ The following are the main differences from the 2.1 grammar:
 - No support for Unicode
 - Supports numbers starting with '.'
 - Supports @font-style 
+- Added Length number types: vh, vz, vmin, vmax, rem, ch
+
+- @media extension (tbd)
 
 A minimal testing tool is included in the file and is enabled/disabled through a single #define constant. 

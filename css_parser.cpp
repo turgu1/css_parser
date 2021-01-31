@@ -45,13 +45,13 @@ class CSSParser
       ERROR, S, CDO, CDC, INCLUDES, DASHMATCH, STRING, BAD_STRING, IDENT, HASH, 
       IMPORT_SYM, PAGE_SYM, MEDIA_SYM, CHARSET_SYM, FONT_FACE_SYM, IMPORTANT_SYM,
       EMS, EXS, LENGTH, ANGLE, TIME, FREQ, DIMENSION, PERCENTAGE,
-      NUMBER, URI, BAD_URI, FUNCTION, SEMICOLON, COLON, COMMA, GT, 
+      NUMBER, URI, BAD_URI, FUNCTION, SEMICOLON, COLON, COMMA, GT, LT, GE, LE,
       MINUS, PLUS, DOT, STAR, SLASH, EQUAL,
       LBRACK, RBRACK, LBRACE, RBRACE, LPARENT, RPARENT, 
       END_OF_FILE
     };
 
-    enum class LengthType : uint8_t { PX, CM, MM, IN, PT, PC, VH, VW };
+    enum class LengthType : uint8_t { PX, CM, MM, IN, PT, PC, VH, VW, REM, CH, VMIN, VMAX };
     enum class AngleType  : uint8_t { DEG, RAD, GRAD };
     enum class TimeType   : uint8_t { MS,  S         };
     enum class FreqType   : uint8_t { HZ,  KHZ       };
@@ -254,7 +254,6 @@ class CSSParser
         else if (ch == ';')  { next_ch(); token = Token::SEMICOLON; }
         else if (ch == ':')  { next_ch(); token = Token::COLON;     }
         else if (ch == ',')  { next_ch(); token = Token::COMMA;     }
-        else if (ch == '>')  { next_ch(); token = Token::GT;        }
         else if (ch == '{')  { next_ch(); token = Token::LBRACE;    }
         else if (ch == '}')  { next_ch(); token = Token::RBRACE;    }
         else if (ch == '[')  { next_ch(); token = Token::LBRACK;    }
@@ -263,6 +262,7 @@ class CSSParser
         else if (ch == ')')  { next_ch(); token = Token::RPARENT;   }
         else if (ch == '=')  { next_ch(); token = Token::EQUAL;     }
         else if (ch == '+')  { next_ch(); token = Token::PLUS;      }
+        else if (ch == '*')  { next_ch(); token = Token::STAR;      }
         else if ((ch == '\'') || (ch == '\"')) {
           token = parse_string() ? Token::STRING : Token::BAD_STRING;
         }
@@ -281,6 +281,7 @@ class CSSParser
           else if ((ch == 'i') && (str[0] == 'n')) { next_ch(); next_ch(); token = Token::LENGTH; length_type = LengthType::IN; }
           else if ((ch == 'v') && (str[0] == 'h')) { next_ch(); next_ch(); token = Token::LENGTH; length_type = LengthType::VH; }
           else if ((ch == 'v') && (str[0] == 'w')) { next_ch(); next_ch(); token = Token::LENGTH; length_type = LengthType::VW; }
+          else if ((ch == 'c') && (str[0] == 'h')) { next_ch(); next_ch(); token = Token::LENGTH; length_type = LengthType::CH; }
           else if ((ch == 'm') && (str[0] == 's')) { next_ch(); next_ch(); token = Token::TIME  ; time_type   =   TimeType::MS; }
           else if  (ch == 's')                     { next_ch();            token = Token::TIME  ; time_type   =   TimeType::S ; }
           else if ((ch == 'h') && (str[0] == 'z')) { next_ch(); next_ch(); token = Token::FREQ  ; freq_type   =   FreqType::HZ; }
@@ -293,8 +294,17 @@ class CSSParser
           else if ((ch == 'r') && (str[0] == 'a') && (str[1] == 'd')) {
             remains -= 2; str += 2; next_ch(); token = Token::ANGLE; angle_type = AngleType::RAD;
           }
+          else if ((ch == 'r') && (str[0] == 'e') && (str[1] == 'm')) {
+            remains -= 2; str += 2; next_ch(); token = Token::LENGTH; length_type = LengthType::REM;
+          }
           else if ((ch == 'g') && (str[0] == 'r') && (str[1] == 'a') && (str[2] == 'd')) {
             remains -= 3; str += 3; next_ch(); token = Token::ANGLE; angle_type = AngleType::GRAD;
+          }
+          else if ((ch == 'v') && (str[0] == 'm') && (str[1] == 'i') && (str[2] == 'n')) {
+            remains -= 3; str += 3; next_ch(); token = Token::LENGTH; length_type = LengthType::VMIN;
+          }
+          else if ((ch == 'v') && (str[0] == 'm') && (str[1] == 'a') && (str[2] == 'x')) {
+            remains -= 3; str += 3; next_ch(); token = Token::LENGTH; length_type = LengthType::VMAX;
           }
           else if (is_nmstart()) {
             parse_ident();
@@ -331,8 +341,12 @@ class CSSParser
             }
           } 
         }
+        else if ((ch == '>') && (str[0] == '=')) { next_ch(); next_ch(); token = Token::GE; }
+        else if ((ch == '<') && (str[0] == '=')) { next_ch(); next_ch(); token = Token::LE; }
         else if (ch == '-') { next_ch(); token = Token::MINUS;     }
         else if (ch == '.') { next_ch(); token = Token::DOT;       }
+        else if (ch == '>') { next_ch(); token = Token::GT;        }
+        else if (ch == '<') { next_ch(); token = Token::LT;        }
         else if (ch == '#') {
           next_ch();
           parse_name();
@@ -459,8 +473,8 @@ class CSSParser
       return true;
     }
 
-    bool term(bool & none) {
-      none = false;
+    bool term(bool * none) {
+      *none = false;
       if ((token == Token::PLUS) || (token == Token::MINUS)) {
         skip_blanks();
       }
@@ -488,18 +502,18 @@ class CSSParser
       } else if (token == Token::HASH) {
         skip_blanks();
       }
-      else none = true;
+      else *none = true;
       return true;
     }
 
     bool expression() {
       bool none;
-      if (!term(none)) return false;
+      if (!term(&none)) return false;
       for (;;) {
         if ((token == Token::SLASH) || (token == Token::COMMA)) {
           skip_blanks();
         }
-        if (!term(none)) return false;
+        if (!term(&none)) return false;
         if (none) break;
       }
       return true;
@@ -703,6 +717,50 @@ class CSSParser
       return true;
     }
 
+    // @media <media-query-list> {
+    //   <group-rule-body>
+    // } 
+    
+    // <media-query-list>           = <media-query>
+    // <media-query>                = <media-condition> | [ not | only ]? <media-type> [ and <media-condition-without-or> ]?
+    // <media-condition>            = <media-not> | <media-and> | <media-or> | <media-in-parens>
+    // <media-type>                 = <ident>
+    // <media-condition-without-or> = <media-not> | <media-and> | <media-in-parens>
+    // <media-not>                  = not <media-in-parens>
+    // <media-and>                  = <media-in-parens> [ and <media-in-parens> ]+
+    // <media-or>                   = <media-in-parens> [ or <media-in-parens> ]+
+    // <media-in-parens>            = ( <media-condition> ) | <media-feature> | <general-enclosed>
+    // <media-feature>              = ( [ <mf-plain> | <mf-boolean> | <mf-range> ] )
+    // <general-enclosed>           = [ <function-token> <any-value> ) ] | ( <ident> <any-value> )
+    // <mf-plain>                   = <mf-name> : <mf-value>
+    // <mf-boolean>                 = <mf-name>
+    // <mf-range>                   = <mf-name> [ '<' | '>' ]? '='? <mf-value> | 
+    //                                <mf-value> [ '<' | '>' ]? '='? <mf-name> | 
+    //                                <mf-value> '<' '='? <mf-name> '<' '='? <mf-value> |
+    //                                <mf-value> '>' '='? <mf-name> '>' '='? <mf-value>
+    // <mf-name>                    = <ident>
+    // <mf-value>                   = <number> | <dimension> | <ident> | <ratio>
+
+    bool is_compare_op() {
+      return (token == Token::LT   ) ||
+             (token == Token::GT   ) ||
+             (token == Token::EQUAL) ||
+             (token == Token::LE   ) ||
+             (token == Token::GE   );
+    }
+
+    bool is_logical_diadic_op() {
+      return (token == Token::IDENT) && 
+             ((strcmp(ident, "and") == 0) ||
+              (strcmp(ident, "or" ) == 0));      
+    }
+
+    bool is_logical_monadic_op() {
+      return (token == Token::IDENT) &&
+             ((strcmp(ident, "only") == 0) ||
+              (strcmp(ident, "not" ) == 0));
+    }
+
     bool media_statement() {
       skip_blanks();
       if (token == Token::IDENT) {
@@ -839,7 +897,7 @@ bool do_file(const char * filename) {
   }
 }
 
-const int FILE_COUNT = 9;
+const int FILE_COUNT = 11;
 
 const char * files[FILE_COUNT] = {
   "test/test1.css",
@@ -851,13 +909,15 @@ const char * files[FILE_COUNT] = {
   "test/test7.css",
   "test/test8.css",
   "test/test9.css",
+  "test/test10.css",
+  "test/test11.css",
 };
 
 int main() {
 
   int count = 0;
 
-  for (int i = 0; i < FILE_COUNT; i++) {
+  for (int i = 0; i < 9 /* FILE_COUNT */; i++) {
     if (do_file(files[i])) count++;
   }
 
