@@ -722,26 +722,32 @@ class CSSParser
     // @media <media-query-list> {
     //   <group-rule-body>
     // } 
-    
-    // <media-query-list>           = <media-query>
-    // <media-query>                = <media-condition> | [ not | only ]? <media-type> [ and <media-condition-without-or> ]?
-    // <media-condition>            = <media-not> | <media-and> | <media-or> | <media-in-parens>
-    // <media-type>                 = <ident>
-    // <media-condition-without-or> = <media-not> | <media-and> | <media-in-parens>
-    // <media-not>                  = not <media-in-parens>
-    // <media-and>                  = <media-in-parens> [ and <media-in-parens> ]+
-    // <media-or>                   = <media-in-parens> [ or <media-in-parens> ]+
-    // <media-in-parens>            = ( <media-condition> ) | <media-feature> | <general-enclosed>
-    // <media-feature>              = ( [ <mf-plain> | <mf-boolean> | <mf-range> ] )
-    // <general-enclosed>           = [ <function-token> <any-value> ) ] | ( <ident> <any-value> )
-    // <mf-plain>                   = <mf-name> : <mf-value>
-    // <mf-boolean>                 = <mf-name>
-    // <mf-range>                   = <mf-name> [ '<' | '>' ]? '='? <mf-value> | 
-    //                                <mf-value> [ '<' | '>' ]? '='? <mf-name> | 
-    //                                <mf-value> '<' '='? <mf-name> '<' '='? <mf-value> |
-    //                                <mf-value> '>' '='? <mf-name> '>' '='? <mf-value>
-    // <mf-name>                    = <ident>
-    // <mf-value>                   = <number> | <dimension> | <ident> | <ratio>
+    //                <media-query> = <media-condition>
+    //                                | [ not | only ]? <media-type> [ and <media-condition-without-or> ]?
+    //                 <media-type> = <ident>
+    //            <media-condition> = <media-not> | <media-in-parens> [ <media-and>* | <media-or>* ]
+    // <media-condition-without-or> = <media-not> | <media-in-parens> <media-and>*
+    //                  <media-not> = not <media-in-parens>
+    //                  <media-and> = and <media-in-parens>
+    //                   <media-or> = or <media-in-parens>
+    //            <media-in-parens> = ( <media-condition> ) | <media-feature> | <general-enclosed>
+    //
+    //              <media-feature> = ( [ <mf-plain> | <mf-boolean> | <mf-range> ] )
+    //                   <mf-plain> = <mf-name> : <mf-value>
+    //                 <mf-boolean> = <mf-name>
+    //                   <mf-range> = <mf-name> <mf-comparison> <mf-value>
+    //                                | <mf-value> <mf-comparison> <mf-name>
+    //                                | <mf-value> <mf-lt> <mf-name> <mf-lt> <mf-value>
+    //                                | <mf-value> <mf-gt> <mf-name> <mf-gt> <mf-value>
+    //                    <mf-name> = <ident>
+    //                   <mf-value> = <number> | <dimension> | <ident> | <ratio>
+    //                      <mf-lt> = '<' '='?
+    //                      <mf-gt> = '>' '='?
+    //                      <mf-eq> = '='
+    //              <mf-comparison> = <mf-lt> | <mf-gt> | <mf-eq>
+    //
+    //           <general-enclosed> = [ <function-token> <any-value> ) ] | ( <ident> <any-value> )
+
 
     bool is_compare_op() {
       return (token == Token::LT   ) ||
