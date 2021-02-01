@@ -717,6 +717,8 @@ class CSSParser
       return true;
     }
 
+    // https://www.w3.org/TR/mediaqueries-4/#typedef-media-query-list
+    //
     // @media <media-query-list> {
     //   <group-rule-body>
     // } 
