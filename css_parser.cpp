@@ -725,12 +725,16 @@ class CSSParser
     //                <media-query> = <media-condition>
     //                                | [ not | only ]? <media-type> [ and <media-condition-without-or> ]?
     //                 <media-type> = <ident>
-    //            <media-condition> = <media-not> | <media-in-parens> [ <media-and>* | <media-or>* ]
-    // <media-condition-without-or> = <media-not> | <media-in-parens> <media-and>*
+    //            <media-condition> = <media-not> 
+    //                                | <media-in-parens> [ <media-and>* | <media-or>* ]
+    // <media-condition-without-or> = <media-not> 
+    //                                | <media-in-parens> <media-and>*
     //                  <media-not> = not <media-in-parens>
     //                  <media-and> = and <media-in-parens>
-    //                   <media-or> = or <media-in-parens>
-    //            <media-in-parens> = ( <media-condition> ) | <media-feature> | <general-enclosed>
+    //                   <media-or> = or  <media-in-parens>
+    //            <media-in-parens> = ( <media-condition> ) 
+    //                                | <media-feature> 
+    //                                | <general-enclosed>
     //
     //              <media-feature> = ( [ <mf-plain> | <mf-boolean> | <mf-range> ] )
     //                   <mf-plain> = <mf-name> : <mf-value>
@@ -740,14 +744,19 @@ class CSSParser
     //                                | <mf-value> <mf-lt> <mf-name> <mf-lt> <mf-value>
     //                                | <mf-value> <mf-gt> <mf-name> <mf-gt> <mf-value>
     //                    <mf-name> = <ident>
-    //                   <mf-value> = <number> | <dimension> | <ident> | <ratio>
+    //                   <mf-value> = <number> 
+    //                                | <dimension> 
+    //                                | <ident> 
+    //                                | <ratio>
     //                      <mf-lt> = '<' '='?
     //                      <mf-gt> = '>' '='?
     //                      <mf-eq> = '='
-    //              <mf-comparison> = <mf-lt> | <mf-gt> | <mf-eq>
+    //              <mf-comparison> = <mf-lt> 
+    //                                | <mf-gt> 
+    //                                | <mf-eq>
     //
-    //           <general-enclosed> = [ <function-token> <any-value> ) ] | ( <ident> <any-value> )
-
+    //           <general-enclosed> = [ <function-token> <any-value> ) ] 
+    //                                | ( <ident> <any-value> )
 
     bool is_compare_op() {
       return (token == Token::LT   ) ||
@@ -769,18 +778,67 @@ class CSSParser
               (strcmp((char *)ident, "not" ) == 0));
     }
 
+    bool media_condition(bool not_token_present, bool * present, bool with_or) {
+      if ((*present = (token == Token::LPARENT))) {
+
+      } 
+      else if ((*present = (token == Token::FUNCTION))) {
+
+      }
+      return true;
+    }
+
+    bool media_query(bool * query_present) {
+      *query_present = false;
+
+      bool media_type_present = false;
+      bool condition_present  = false;
+      bool not_token_present  = false;
+      bool only_token_present = false;
+
+      if (token == Token::IDENT) {
+        not_token_present  = strcmp((char *)ident, "not" ) == 0;
+        only_token_present = strcmp((char *)ident, "only") == 0;
+
+        if (not_token_present || only_token_present) skip_blanks();
+
+        if (token == Token::IDENT) {
+          // This is a media type
+          media_type_present = true;
+          skip_blanks();
+          not_token_present = false;
+          if ((token == Token::IDENT) && 
+              (strcmp((char *)ident, "and") == 0)) {
+            skip_blanks();
+            if ((token == Token::IDENT) && 
+                ((not_token_present = strcmp((char *)ident, "not") == 0))) {
+              skip_blanks();
+            }
+            if (!media_condition(not_token_present, &condition_present, false)) return false;
+            if (!condition_present) return false;
+          }
+        }
+        else {
+          if (only_token_present) return false; 
+          if (!media_condition(not_token_present, &condition_present, true)) return false;
+        }
+      }
+
+      *query_present = media_type_present || condition_present;
+      return true;
+    }
+
     bool media_statement() {
       skip_blanks();
-      if (token == Token::IDENT) {
-        skip_blanks();
+      bool query_present;
+      if (!media_query(&query_present)) return false;
+      if (query_present) {
         while (token == Token::COMMA) {
           skip_blanks();
-          if (token == Token::IDENT) {
-            skip_blanks();
-          } else return false;
+          if (!media_query(&query_present)) return false;
         }
-      } else return false;
-
+      }
+ 
       if (token == Token::LBRACE) {
         skip_blanks();
         while (token != Token::RBRACE) {
