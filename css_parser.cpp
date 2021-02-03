@@ -766,18 +766,6 @@ class CSSParser
              (token == Token::GE   );
     }
 
-    bool is_logical_diadic_op() {
-      return (token == Token::IDENT) && 
-             ((strcmp((char *)ident, "and") == 0) ||
-              (strcmp((char *)ident, "or" ) == 0));      
-    }
-
-    bool is_logical_monadic_op() {
-      return (token == Token::IDENT) &&
-             ((strcmp((char *)ident, "only") == 0) ||
-              (strcmp((char *)ident, "not" ) == 0));
-    }
-
     bool media_condition(bool not_token_present, bool * present, bool with_or) {
       if ((*present = (token == Token::LPARENT))) {
 
