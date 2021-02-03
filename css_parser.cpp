@@ -758,20 +758,47 @@ class CSSParser
     //           <general-enclosed> = [ <function-token> <any-value> ) ] 
     //                                | ( <ident> <any-value> )
 
-    bool is_compare_op() {
-      return (token == Token::LT   ) ||
-             (token == Token::GT   ) ||
-             (token == Token::EQUAL) ||
-             (token == Token::LE   ) ||
-             (token == Token::GE   );
+    bool media_in_parens() {
+      if (token != Token::LPARENT) {
+        skip_blanks();
+        bool not_token_present = (token == Token::IDENT) && (strcmp((char *)ident, "not" ) == 0);
+        if (not_token_present) skip_blanks();
+        if ((token == Token::LPARENT) || (token == Token::FUNCTION)) {
+          bool present;
+          if (!media_condition(not_token_present, &present, true)) return false;
+        }
+        else {
+
+        }
+      }
+      else { // Token::FUNCTION
+         skip_blanks();
+      }
+
+      if (token == Token::RPARENT) skip_blanks();
+      else return false;
+
+      return true;
     }
 
     bool media_condition(bool not_token_present, bool * present, bool with_or) {
-      if ((*present = (token == Token::LPARENT))) {
-
-      } 
-      else if ((*present = (token == Token::FUNCTION))) {
-
+      *present = (token == Token::LPARENT) || (token == Token::FUNCTION);
+      if (*present) {
+        if (!media_in_parens()) return false;
+        if ((token == Token::IDENT) && (strcmp((char *)ident, "and") == 0)) {
+          while ((token == Token::IDENT) && (strcmp((char *)ident, "and") == 0)) {
+            skip_blanks();
+            if ((token != Token::LPARENT) && (token != Token::FUNCTION)) return false;
+            if (!media_in_parens()) return false;
+          }
+        }
+        else if (with_or && (token == Token::IDENT) && (strcmp((char *)ident, "or") == 0)) {
+          while ((token == Token::IDENT) && (strcmp((char *)ident, "or") == 0)) {
+            skip_blanks();
+            if ((token != Token::LPARENT) && (token != Token::FUNCTION)) return false;
+            if (!media_in_parens()) return false;
+          }
+        }
       }
       return true;
     }
