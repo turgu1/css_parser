@@ -822,8 +822,8 @@ class CSSParser
           Token op2 = token;
           skip_blanks();
           if (!mf_value()) return false;
-          if ((is_lower(op1) && is_greater(op2)) || 
-              (is_greater(op1) && is_lower(op2))) {
+          if ((  is_lower(op1) && is_greater(op2)) || 
+              (is_greater(op1) &&   is_lower(op2))) {
             return false;
           }
         } 
