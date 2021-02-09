@@ -266,8 +266,10 @@ class CSSParser
         else if ((ch == '\'') || (ch == '\"')) {
           token = parse_string() ? Token::STRING : Token::BAD_STRING;
         }
-        else if (((ch >= '0') && (ch <= '9')) || 
-                 ((ch == '.') && ((str[0] >= '0') && (str[0] <= '9')))) {
+        else if (
+            ((ch == '-') && ((str[0] == '.') || ((str[0] >= '0') && (str[0] <= '9')))) ||
+            ((ch >= '0') && (ch <= '9')) || 
+            ((ch == '.') && ((str[0] >= '0') && (str[0] <= '9')))) {
           parse_number();
           token = Token::NUMBER;
           if      ((ch == 'e') && (str[0] == 'm')) { next_ch(); next_ch(); token = Token::EMS       ; }
@@ -311,7 +313,7 @@ class CSSParser
             token = Token::DIMENSION;
           }
         }
-        else if ((ch == '-') && (strncmp((char *)str, "->", 2) == 0)) {
+        else if ((ch == '-') && (str[0] == '-') && (str[1] == '>')) {
           token = Token::CDC;
           remains -= 2; str += 2; next_ch();
         }        
@@ -758,8 +760,73 @@ class CSSParser
     //           <general-enclosed> = [ <function-token> <any-value> ) ] 
     //                                | ( <ident> <any-value> )
 
+    bool mf_value() {
+      if (token == Token::NUMBER) {
+        skip_blanks();
+        if (token == Token::SLASH) {
+          // ratio
+          skip_blanks();
+          if (token != Token::NUMBER) return false;
+          skip_blanks();
+        }
+      }
+      else if (token == Token::DIMENSION) {
+        skip_blanks();
+      }
+      else if (token == Token::IDENT) {
+        skip_blanks();
+      }
+      else return false;
+
+      return true;
+    }
+
+    bool is_logical() {
+      return 
+        (token == Token::GT) ||
+        (token == Token::GE) ||
+        (token == Token::LT) ||
+        (token == Token::LE);
+    }
+
+    bool is_lower(Token token) {
+      return 
+        (token == Token::LT) ||
+        (token == Token::LE);
+    }
+
+    bool is_greater(Token token) {
+      return 
+        (token == Token::GT) ||
+        (token == Token::GE);
+    }
+
+    bool mf_range() {
+      if (!mf_value()) return false;
+      if (token == Token::EQUAL) {
+        skip_blanks();
+        if (!mf_value()) return false;
+      }
+      else if (is_logical()) {
+        Token op1 = token;
+        skip_blanks();
+        if (!mf_value()) return false;
+        if (is_logical()) {
+          Token op2 = token;
+          skip_blanks();
+          if (!mf_value()) return false;
+          if ((is_lower(op1) && is_greater(op2)) || 
+              (is_greater(op1) && is_lower(op2))) {
+            return false;
+          }
+        } 
+      }
+      else return false;
+      return true;
+    }
+
     bool media_in_parens() {
-      if (token != Token::LPARENT) {
+      if (token == Token::LPARENT) {
         skip_blanks();
         bool not_token_present = (token == Token::IDENT) && (strcmp((char *)ident, "not" ) == 0);
         if (not_token_present) skip_blanks();
@@ -767,12 +834,33 @@ class CSSParser
           bool present;
           if (!media_condition(not_token_present, &present, true)) return false;
         }
-        else {
-
+        else { // media-feature
+          if (token == Token::IDENT) {
+            skip_blanks();
+            if (token == Token::RPARENT) {
+              // mf-boolean
+            }
+            else if (token == Token::COLON) {
+              // mf-plain
+              skip_blanks();
+              if (!mf_value()) return false;
+            }
+            else if (mf_range()) {
+            }
+            else while ((token != Token::END_OF_FILE) && (token != Token::RPARENT)) {
+              // any-values
+              skip_blanks();
+            }
+          }
+          else if (!mf_range()) return false;
         }
       }
       else { // Token::FUNCTION
-         skip_blanks();
+        skip_blanks();
+        while ((token != Token::END_OF_FILE) && (token != Token::RPARENT)) {
+          // any-values
+          skip_blanks();
+        }
       }
 
       if (token == Token::RPARENT) skip_blanks();
@@ -806,10 +894,11 @@ class CSSParser
     bool media_query(bool * query_present) {
       *query_present = false;
 
-      bool media_type_present = false;
-      bool condition_present  = false;
-      bool not_token_present  = false;
-      bool only_token_present = false;
+      bool media_type_present      = false;
+      bool condition_present       = false;
+      bool media_in_parens_present = false;
+      bool not_token_present       = false;
+      bool only_token_present      = false;
 
       if (token == Token::IDENT) {
         not_token_present  = strcmp((char *)ident, "not" ) == 0;
@@ -838,8 +927,12 @@ class CSSParser
           if (!media_condition(not_token_present, &condition_present, true)) return false;
         }
       }
+      else if (token == Token::LPARENT) {
+        if (!media_in_parens()) return false;
+        media_in_parens_present = true;
+      }
 
-      *query_present = media_type_present || condition_present;
+      *query_present = media_type_present || condition_present || media_in_parens_present;
       return true;
     }
 
@@ -998,7 +1091,8 @@ int main() {
 
   int count = 0;
 
-  for (int i = 0; i < 9 /* FILE_COUNT */; i++) {
+  for (int i = 9; i <  FILE_COUNT; i++) {
+    std::cout << "---- File: " << files[i] << " ----" << std::endl;
     if (do_file(files[i])) count++;
   }
 
