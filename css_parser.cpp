@@ -19,6 +19,7 @@
 
 #include <cinttypes>
 #include <cstring>
+#include <cmath>
 
 #if CSS_PARSER_TEST
   #include <iostream>
@@ -27,7 +28,7 @@
 class CSSParser
 {
   public:
-    CSSParser() : skip(0), allow_minus(false) { }
+    CSSParser() : skip(0) { }
    ~CSSParser() { }
 
   private:
@@ -42,13 +43,12 @@ class CSSParser
     static const int16_t STRING_SIZE = 128;
 
     enum class Token : uint8_t { 
-      ERROR, S, CDO, CDC, INCLUDES, DASHMATCH, STRING, BAD_STRING, IDENT, HASH, 
-      IMPORT_SYM, PAGE_SYM, MEDIA_SYM, CHARSET_SYM, FONT_FACE_SYM, IMPORTANT_SYM,
-      EMS, EXS, LENGTH, ANGLE, TIME, FREQ, DIMENSION, PERCENTAGE,
-      NUMBER, URI, BAD_URI, FUNCTION, SEMICOLON, COLON, COMMA, GT, LT, GE, LE,
-      MINUS, PLUS, DOT, STAR, SLASH, EQUAL,
-      LBRACK, RBRACK, LBRACE, RBRACE, LPARENT, RPARENT, 
-      END_OF_FILE
+      ERROR,  WHITESPACE, CDO,        CDC,      INCLUDES,  DASHMATCH,   STRING,        BAD_STRING, 
+      IDENT,  HASH,       IMPORT_SYM, PAGE_SYM, MEDIA_SYM, CHARSET_SYM, FONT_FACE_SYM, IMPORTANT_SYM, 
+      EMS,    EXS,        LENGTH,     ANGLE,    TIME,      FREQ,        DIMENSION,     PERCENTAGE, 
+      NUMBER, URI,        BAD_URI,    FUNCTION, SEMICOLON, COLON,       COMMA,         GT, 
+      LT,     GE,         LE,         MINUS,    PLUS,      DOT,         STAR,          SLASH, 
+      EQUAL,  LBRACK,     RBRACK,     LBRACE,   RBRACE,    LPARENT,     RPARENT,       END_OF_FILE
     };
 
     enum class LengthType : uint8_t { PX, CM, MM, IN, PT, PC, VH, VW, REM, CH, VMIN, VMAX };
@@ -64,9 +64,7 @@ class CSSParser
     uint8_t string[STRING_SIZE];
     uint8_t   name[  NAME_SIZE];
 
-    bool allow_minus;
-
-    float   num;
+    float      num;
     
     Token      token;
 
@@ -83,7 +81,7 @@ class CSSParser
       else ch = '\0'; 
     }
     
-    inline bool is_space() {
+    inline bool is_white_space() {
       return (ch == ' ' ) ||
              (ch == '\t') ||
              (ch == '\r') ||
@@ -101,18 +99,17 @@ class CSSParser
              (ch >= 160);
     }
     
-    inline bool is_nmstart() {
-      return ((ch >= 'a') && (ch <= 'z')) ||
-             ((ch >= 'A') && (ch <= 'Z')) ||
-             ((ch >= '0') && (ch <= '9')) ||
-             (ch == '_' ) || 
-             (ch == '\\') ||
-             (allow_minus && (ch == '-')) ||
-             (ch >= 160);
+    bool is_nmstart(uint8_t c) {
+      return ((c >= 'a') && (c <= 'z')) ||
+             ((c >= 'A') && (c <= 'Z')) ||
+             (c == '_' ) || 
+             (c == '-')  ||
+             (c == '\\') ||
+             (c >= 160);
     }
     
     void skip_spaces() {
-      while (is_space()) next_ch();
+      while (is_white_space()) next_ch();
     }
 
     bool parse_url() {
@@ -178,6 +175,10 @@ class CSSParser
 
     void parse_number() {
       num = 0;
+      bool neg = ch == '-';
+      if (neg) next_ch();
+      else if (ch == '+') next_ch();
+  
       float dec = 0.1;
       while ((ch >= '0') && (ch <= '9')) {
         num = (num * 10) + (ch - '0');
@@ -189,6 +190,24 @@ class CSSParser
           num = num + (dec * (ch - '0'));
           dec = dec * 0.1;
           next_ch();
+        }
+      }
+
+      if (neg) num = -num;
+
+      if ((ch == 'e') || (ch == 'E')) {
+        float exp = 0.0;
+        next_ch();
+        neg = ch == '-';
+        if (neg) next_ch();
+        else if (ch == '+') next_ch();
+        while ((ch >= '0') && (ch <= '9')) {
+          exp = (exp * 10) + (ch - '0');
+          next_ch();
+        }
+        if (exp > 0) {
+          if (neg) exp = -exp;
+          num = pow(num, exp);
         }
       }
     }
@@ -250,7 +269,7 @@ class CSSParser
       bool done = false;
       while (!done) {
         if      (ch == '\0') token = Token::END_OF_FILE;
-        else if (is_space()) { next_ch(); token = Token::S;         }
+        else if (is_white_space()) { next_ch(); token = Token::WHITESPACE; }
         else if (ch == ';')  { next_ch(); token = Token::SEMICOLON; }
         else if (ch == ':')  { next_ch(); token = Token::COLON;     }
         else if (ch == ',')  { next_ch(); token = Token::COMMA;     }
@@ -261,13 +280,12 @@ class CSSParser
         else if (ch == '(')  { next_ch(); token = Token::LPARENT;   }
         else if (ch == ')')  { next_ch(); token = Token::RPARENT;   }
         else if (ch == '=')  { next_ch(); token = Token::EQUAL;     }
-        else if (ch == '+')  { next_ch(); token = Token::PLUS;      }
         else if (ch == '*')  { next_ch(); token = Token::STAR;      }
         else if ((ch == '\'') || (ch == '\"')) {
           token = parse_string() ? Token::STRING : Token::BAD_STRING;
         }
         else if (
-            ((ch == '-') && ((str[0] == '.') || ((str[0] >= '0') && (str[0] <= '9')))) ||
+            (((ch == '-') || (ch == '+')) && ((str[0] == '.') || ((str[0] >= '0') && (str[0] <= '9')))) ||
             ((ch >= '0') && (ch <= '9')) || 
             ((ch == '.') && ((str[0] >= '0') && (str[0] <= '9')))) {
           parse_number();
@@ -308,7 +326,7 @@ class CSSParser
           else if ((ch == 'v') && (str[0] == 'm') && (str[1] == 'a') && (str[2] == 'x')) {
             remains -= 3; str += 3; next_ch(); token = Token::LENGTH; length_type = LengthType::VMAX;
           }
-          else if (is_nmstart()) {
+          else if (is_nmstart(ch)) {
             parse_ident();
             token = Token::DIMENSION;
           }
@@ -317,7 +335,7 @@ class CSSParser
           token = Token::CDC;
           remains -= 2; str += 2; next_ch();
         }        
-        else if (is_nmstart()) {
+        else if (is_nmstart(ch) || ((ch == '-') && (is_nmstart(str[0])))) {
           parse_ident();
           token = Token::IDENT;
           if (ch == '(') {
@@ -345,6 +363,7 @@ class CSSParser
         }
         else if ((ch == '>') && (str[0] == '=')) { next_ch(); next_ch(); token = Token::GE; }
         else if ((ch == '<') && (str[0] == '=')) { next_ch(); next_ch(); token = Token::LE; }
+        else if (ch == '+') { next_ch(); token = Token::PLUS;      }
         else if (ch == '-') { next_ch(); token = Token::MINUS;     }
         else if (ch == '.') { next_ch(); token = Token::DOT;       }
         else if (ch == '>') { next_ch(); token = Token::GT;        }
@@ -443,7 +462,7 @@ class CSSParser
 
     void skip_blanks() {
       if (token == Token::END_OF_FILE) return;
-      do next_token(); while (token == Token::S);
+      do next_token(); while (token == Token::WHITESPACE);
     }
 
     bool import_statement() {
@@ -542,16 +561,12 @@ class CSSParser
         } else return false;
       }
       if (token == Token::LBRACE) {
-        allow_minus = true;
         skip_blanks();
-        allow_minus = false;
         if (token == Token::IDENT) {
           if (!declaration()) return false;
         }
         while (token == Token::SEMICOLON) {
-          allow_minus = true;
           skip_blanks();
-          allow_minus = false;
           if (token == Token::IDENT) {
             if (!declaration()) return false;
           }
@@ -566,16 +581,12 @@ class CSSParser
     bool font_face_statement() {
       skip_blanks();
       if (token == Token::LBRACE) {
-        allow_minus = true;
         skip_blanks();
-        allow_minus = false;
         if (token == Token::IDENT) {
           if (!declaration()) return false;
         }
         while (token == Token::SEMICOLON) {
-          allow_minus = true;
           skip_blanks();
-          allow_minus = false;
           if (token == Token::IDENT) {
             if (!declaration()) return false;
           }
@@ -675,7 +686,7 @@ class CSSParser
         skip_blanks();
         if (!selector()) return false;
       }
-      else if (token == Token::S) {
+      else if (token == Token::WHITESPACE) {
         skip_blanks();
         if ((token == Token::PLUS) || (token == Token::GT)) {
           skip_blanks();
@@ -699,16 +710,12 @@ class CSSParser
         if (!selector()) return false;
       }
       if (token == Token::LBRACE) {
-        allow_minus = true;
         skip_blanks();
-        allow_minus = false;
         if (token == Token::IDENT) {
           if (!declaration()) return false;
         }
         while (token == Token::SEMICOLON) {
-          allow_minus = true;
           skip_blanks();
-          allow_minus = false;
           if (token == Token::IDENT) {
             if (!declaration()) return false;
           }
@@ -977,9 +984,9 @@ class CSSParser
         } else return false;
       }
 
-      while ((token == Token::S  ) ||
-             (token == Token::CDO) ||
-             (token == Token::CDC)) {
+      while ((token == Token::WHITESPACE) ||
+             (token == Token::CDO       ) ||
+             (token == Token::CDC       )) {
         if      (token == Token::CDO) skip++;
         else if (token == Token::CDC) skip--;
         next_token();
