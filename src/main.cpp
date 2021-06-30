@@ -3,6 +3,7 @@
 #include <filesystem>
 
 #include "css.hpp"
+#include "dom.hpp"
 
 bool do_file(const char * filename) {
 
@@ -61,7 +62,23 @@ const char * files[FILE_COUNT] = {
   "test/test11.css",
 };
 
+void test_dom()
+{
+  DOM dom;
+
+  DOM::Node * div = dom.body->add_child(DOM::Tag::DIV)->add_id("the_div");
+  div->add_child(DOM::Tag::H1);
+  div->add_child(DOM::Tag::P)->add_id("para1");
+  div->add_class("toto");
+
+  dom.show();
+}
+
+
 int main() {
+
+  test_dom();
+  return 0;
 
   int count = 0;
   int qty = 0;

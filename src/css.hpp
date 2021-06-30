@@ -21,7 +21,7 @@
 #include <fstream>
 
 #include "memory_pool.hpp"
-
+#include "dom.hpp"
 #include "fonts.hpp"
 
 /**
@@ -127,7 +127,11 @@
 
 class CSS
 {
-  friend class CSSParser;
+  private:
+    const std::string id;           // Unique identifier (filename) for this CSS instance
+    const std::string folder_path;  // Path used for all other files access (relative)
+    bool  ghost;                    // True if this instance rules content came from other instances
+
   public:
     CSS(const std::string & css_id, 
         const std::string & file_folder_path, 
@@ -142,22 +146,10 @@ class CSS
     const std::string &          get_id() const { return id;          }
     const std::string & get_folder_path() const { return folder_path; }
 
-    void show();
-
-  protected:
-    const std::string id;           // Unique identifier (filename) for this CSS instance
-    const std::string folder_path;  // Path used for all other files access (relative)
-    bool  ghost;                    // True if this instance rules content came from other instances
 
     enum class     ValueType : uint8_t { NO_TYPE, EM,  EX, PERCENT, STR, PX,   CM,   MM,  IN,  PT, 
                                          PC,      VH,  VW, REM,     CH,  VMIN, VMAX, DEG, RAD, GRAD, 
                                          MSEC,    SEC, HZ, KHZ,     URL };
-
-    // The pseudo tags NONE and ANY are for selector definition, when no tag is identified 
-    // in the selector or the '*' selector is used.
-    enum class           Tag : uint8_t { NONE, BODY, P, LI, BREAK, H1, H2, H3, H4, H5, H6, 
-                                         B, I, A, IMG, IMAGE, EM, DIV, SPAN, PRE,
-                                         BLOCKQUOTE, STRONG, ANY };
 
     enum class         Align : uint8_t { LEFT, CENTER, RIGHT, JUSTIFY };
     enum class TextTransform : uint8_t { NONE, UPPERCASE, LOWERCASE, CAPITALIZE };
@@ -169,10 +161,6 @@ class CSS
 
     static const char * value_type_str[25];
 
-    typedef std::map<std::string, Tag> Tags;
-
-    static Tags tags;
-
     typedef std::map<std::string, PropertyId> PropertyMap;
     typedef std::map<std::string, int16_t>    FontSizeMap;
 
@@ -181,11 +169,10 @@ class CSS
 
     // ---- Selector definition ----
 
-    enum class    NodeOp : uint8_t { NONE, DESCENDANT, CHILD, ADJACENT };
+    enum class     SelOp : uint8_t { NONE, DESCENDANT, CHILD, ADJACENT };
     enum class Qualifier : uint8_t { NONE, FIRST_CHILD                 };
 
     typedef std::forward_list<std::string> ClassList;
-    typedef std::forward_list<std::string> IDList;
 
     #pragma pack(push, 1)
       // The following is OK in a little endian context.
@@ -206,159 +193,158 @@ class CSS
       };
 
       struct SelectorNode {
-        NodeOp      op;
-        Tag         tag;
-        IDList      id_list;
+        std::string id;
         ClassList   class_list;
         Qualifier   qualifier;
         uint8_t     class_count, id_count;
+        SelOp       op;
+        DOM::Tag    tag;
         SelectorNode() {
-          op          = NodeOp::NONE;
-          tag         = Tag::NONE;
+          op          = SelOp::NONE;
+          tag         = DOM::Tag::NONE;
           qualifier   = Qualifier::NONE;
           class_count = 0;
           id_count    = 0;
         }
         ~SelectorNode() {
           class_list.clear();
-          id_list.clear();
         }
         void add_class(std::string class_name) {
           class_list.push_front(class_name);
           class_count += 1;
         }
-        void add_id(std::string id) {
-          id_list.push_front(id);
+        void add_id(std::string the_id) {
+          id = the_id;
           id_count += 1;
         }
-        void set_tag(Tag the_tag) {
+        void set_tag(DOM::Tag the_tag) {
           tag = the_tag;
         }
         void set_qualifier(Qualifier q) {
           qualifier = q;
         }
         void show() const {
-          if (op == NodeOp::CHILD)      std::cout << " > ";
-          if (op == NodeOp::ADJACENT)   std::cout << " + ";
-          if (op == NodeOp::DESCENDANT) std::cout <<   " ";
-          if (tag != Tag::NONE) {
-            for (const auto & [key, value] : tags) {
+          if (op == SelOp::CHILD)      std::cout << " > ";
+          if (op == SelOp::ADJACENT)   std::cout << " + ";
+          if (op == SelOp::DESCENDANT) std::cout <<   " ";
+          if (tag != DOM::Tag::NONE) {
+            for (const auto & [key, value] : DOM::tags) {
               if (value == tag) {
                 std::cout << key;
                 break;
               }
             }         
           }       
-          for (auto & id : id_list)    std::cout << "#" << id;
+          if (id_count > 0) std::cout << "#" << id;
           for (auto & cl : class_list) std::cout << "." << cl;
           if (qualifier == Qualifier::FIRST_CHILD) std::cout << ":first_child";
         }
       };
-    #pragma pack(pop)
 
-    typedef std::forward_list<SelectorNode *> SelectorNodeList;
+      typedef std::forward_list<SelectorNode *> SelectorNodeList;
 
-    struct Selector {
-      Specificity specificity;
-      SelectorNodeList selector_node_list;
-      Selector() {
-        specificity.value = 0;
-      }
-      ~Selector() {
-        for (auto * selector_node : selector_node_list) {
-            selector_node_pool.deleteElement(selector_node);
+      struct Selector {
+        Specificity specificity;
+        SelectorNodeList selector_node_list;
+        Selector() {
+          specificity.value = 0;
         }
-        selector_node_list.clear();
-      }
-      void add_selector_node(SelectorNode * node) {
-        selector_node_list.push_front(node);
-      }
-      void compute_specificity(uint8_t order) {
-        specificity.spec.order = order;
-        for (auto * node : selector_node_list) {
-          specificity.spec.tag_count   += (node->tag == Tag::NONE ? 0 : 1);
-          specificity.spec.class_count += node->class_count;
-          specificity.spec.id_count    += node->id_count;
-        }
-      }
-      bool is_empty() {
-        return selector_node_list.empty();
-      }
-      void show_selector(SelectorNodeList::const_iterator node_it, int8_t lev) const {
-        if (node_it != selector_node_list.end()) {
-          SelectorNodeList::const_iterator next_node_it = node_it;
-          show_selector(++next_node_it, lev + 1);
-          (*node_it)->show();
-        }
-      }
-      void show() const {
-        specificity.show();
-        show_selector(selector_node_list.cbegin(), 0); 
-      }
-    };
-
-    struct Value {
-      float       num;
-      std::string str;
-      ValueType   value_type;
-      union {
-        Display          display;
-        Align            align;
-        TextTransform    text_transform;
-        Fonts::FaceStyle face_style;
-      } choice;
-      Value() {
-        value_type = ValueType::NO_TYPE;
-        num = 0.0;
-      }
-      void show() {
-        if (value_type == ValueType::STR) {
-          std::cout << str;
-        }
-        else if (value_type == ValueType::URL) {
-          std::cout << "url(" << str << ')';
-        }
-        else {
-          std::cout << num << value_type_str[(uint8_t)value_type];
-        }         
-      }
-    };
-
-    typedef std::forward_list<Value *> Values;
-
-    struct Property {
-      PropertyId id;
-      Values     values;
-      ~Property() {
-        for (auto * value : values) {
-          value_pool.deleteElement(value);
-        }
-        values.clear();
-      }
-      void add_value(Value * v) {
-        values.push_front(v);
-      }
-      void completed() {
-        values.reverse();
-      }
-      void show() {
-        std::cout << "  ";
-        for (const auto & [key, value] : property_map) {
-          if (value == id) {
-            std::cout << key;
-            break;
+        ~Selector() {
+          for (auto * selector_node : selector_node_list) {
+              selector_node_pool.deleteElement(selector_node);
           }
-        }         
-        std::cout << ": ";
-        bool first = true;
-        for (auto * v : values) {
-          if (!first) std::cout << ", ";
-          v->show();
-          first = false;
+          selector_node_list.clear();
         }
-        std::cout << ';' << std::endl;
-      }
-    };
+        void add_selector_node(SelectorNode * node) {
+          selector_node_list.push_front(node);
+        }
+        void compute_specificity(uint8_t order) {
+          specificity.spec.order = order;
+          for (auto * node : selector_node_list) {
+            specificity.spec.tag_count   += (((node->tag == DOM::Tag::NONE) || (node->tag == DOM::Tag::ANY)) ? 0 : 1);
+            specificity.spec.class_count += node->class_count;
+            specificity.spec.id_count    += node->id_count;
+          }
+        }
+        bool is_empty() {
+          return selector_node_list.empty();
+        }
+        void show_selector(SelectorNodeList::const_iterator node_it, int8_t lev) const {
+          if (node_it != selector_node_list.end()) {
+            SelectorNodeList::const_iterator next_node_it = node_it;
+            show_selector(++next_node_it, lev + 1);
+            (*node_it)->show();
+          }
+        }
+        void show() const {
+          specificity.show();
+          show_selector(selector_node_list.cbegin(), 0); 
+        }
+      };
+
+      struct Value {
+        float       num;
+        std::string str;
+        ValueType   value_type;
+        union {
+          Display          display;
+          Align            align;
+          TextTransform    text_transform;
+          Fonts::FaceStyle face_style;
+        } choice;
+        Value() {
+          value_type = ValueType::NO_TYPE;
+          num = 0.0;
+        }
+        void show() {
+          if (value_type == ValueType::STR) {
+            std::cout << str;
+          }
+          else if (value_type == ValueType::URL) {
+            std::cout << "url(" << str << ')';
+          }
+          else {
+            std::cout << num << value_type_str[(uint8_t)value_type];
+          }         
+        }
+      };
+
+      typedef std::forward_list<Value *> Values;
+
+      struct Property {
+        PropertyId id;
+        Values     values;
+        ~Property() {
+          for (auto * value : values) {
+            value_pool.deleteElement(value);
+          }
+          values.clear();
+        }
+        void add_value(Value * v) {
+          values.push_front(v);
+        }
+        void completed() {
+          values.reverse();
+        }
+        void show() {
+          std::cout << "  ";
+          for (const auto & [key, value] : property_map) {
+            if (value == id) {
+              std::cout << key;
+              break;
+            }
+          }         
+          std::cout << ": ";
+          bool first = true;
+          for (auto * v : values) {
+            if (!first) std::cout << ", ";
+            v->show();
+            first = false;
+          }
+          std::cout << ';' << std::endl;
+        }
+      };
+    #pragma pack(pop)
 
     // Sorted from the less specific to the most specific
     struct rule_compare {
@@ -384,5 +370,10 @@ class CSS
     static MemoryPool<SelectorNode> selector_node_pool;
     static MemoryPool<Selector>     selector_pool;
 
-    void show_selector(SelectorNodeList & selector, SelectorNodeList::const_iterator node_it, int8_t lev);
+    void match(DOM::Node * node, RulesMap & to_rules);
+    void show(RulesMap & the_rules_map);
+
+  private:
+    bool match_simple_selector(DOM::Node & node, SelectorNode & simple_sel);
+    bool match_selector(DOM::Node * node, Selector & sel);
 };

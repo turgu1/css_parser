@@ -844,15 +844,15 @@ class CSSParser
       bool done = false;
       while (true) {
         if (token == Token::IDENT) {
-          CSS::Tags::const_iterator it = css.tags.find(ident);
-          if (it != css.tags.end()) {
+          DOM::Tags::const_iterator it = DOM::tags.find(ident);
+          if (it != DOM::tags.end()) {
             node->set_tag(it->second);
             next_token();
           }
           else break;
         }
         else if (token == Token::STAR) {
-          node->tag = CSS::Tag::ANY;
+          node->tag = DOM::Tag::ANY;
           next_token();
         }
         if ((token == Token::HASH  ) ||
@@ -886,7 +886,7 @@ class CSSParser
           if ((token == Token::PLUS) || (token == Token::GT)) {
             skip_blanks();
             if (((node = selector_node())) == nullptr) break;
-            node->op = (token == Token::PLUS) ? CSS::NodeOp::ADJACENT : CSS::NodeOp::CHILD;
+            node->op = (token == Token::PLUS) ? CSS::SelOp::ADJACENT : CSS::SelOp::CHILD;
             sel->add_selector_node(node);
           }
           else if ((token == Token::IDENT ) ||
@@ -896,7 +896,7 @@ class CSSParser
                    (token == Token::LBRACK) ||
                    (token == Token::COLON )) {
             if (((node = selector_node())) == nullptr) break;
-            node->op = CSS::NodeOp::DESCENDANT;
+            node->op = CSS::SelOp::DESCENDANT;
             sel->add_selector_node(node);
           }
           else {
@@ -961,19 +961,6 @@ class CSSParser
           }
           css.suites.push_front(properties);
 
-          // Debugging stuff
-
-          bool first = true;
-          for (auto * sel : selectors) {
-            if (!first) std::cout << ", ";
-            sel->show();
-            first = false;
-          }
-          std::cout << " {" << std::endl;
-          for (auto * prop : *properties) {
-            prop->show();
-          }
-          std::cout << "}" << std::endl;
         }
       }
 

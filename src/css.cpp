@@ -40,13 +40,6 @@ CSS::FontSizeMap CSS::font_size_map = {
   { "xx-large", 24 }
 };
 
-CSS::Tags CSS::tags
-      = {{"p",           Tag::P}, {"div",     Tag::DIV}, {"span", Tag::SPAN}, {"br",  Tag::BREAK}, {"h1",                 Tag::H1},  
-         {"h2",         Tag::H2}, {"h3",       Tag::H3}, {"h4",     Tag::H4}, {"h5",     Tag::H5}, {"h6",                 Tag::H6}, 
-         {"b",           Tag::B}, {"i",         Tag::I}, {"em",     Tag::EM}, {"body", Tag::BODY}, {"a",                   Tag::A},
-         {"img",       Tag::IMG}, {"image", Tag::IMAGE}, {"li",     Tag::LI}, {"pre",   Tag::PRE}, {"blockquote", Tag::BLOCKQUOTE},
-         {"strong", Tag::STRONG}, {"none",   Tag::NONE}, {"*",     Tag::ANY}};
-
 const char * CSS::value_type_str[25] = {
   "",     "em",  "ex", "%",   "",   "px",   "cm",   "mm",  "in",  "pt",
   "pc",   "vh",  "vw", "rem", "ch", "vmin", "vmax", "deg", "rad", "grad",
@@ -83,12 +76,79 @@ CSS::~CSS()
   }
 }
 
-void
-CSS::show() 
+bool 
+CSS::match_simple_selector(DOM::Node & node, SelectorNode & simple_sel) 
+{
+  if (simple_sel.class_count > 0) {
+    for (auto & sel_class : simple_sel.class_list) {
+      bool found = false;
+      for (auto & node_class : node.class_list) {
+        if (sel_class.compare(node_class) == 0) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) return false;
+    }
+  }
+  if ((simple_sel.tag != DOM::Tag::NONE) && (simple_sel.tag != DOM::Tag::ANY) && (simple_sel.tag != node.tag)) return false;
+  if ((simple_sel.id_count > 0) && (simple_sel.id.compare(node.id) != 0)) return false;
+  if ((simple_sel.qualifier == Qualifier::FIRST_CHILD) && !node.first_child) return false;
+  return true;
+}
+
+bool 
+CSS::match_selector(DOM::Node * node, Selector & sel) 
+{
+  SelOp op = SelOp::NONE;
+  DOM::Node * the_node = node;
+  // The selector_node_list is already in a reverse order, so we process selectors from right to left
+  for (auto * sel_node : sel.selector_node_list) {
+    switch (op) {
+      case SelOp::NONE:
+        if (!match_simple_selector(*the_node, *sel_node)) return false;
+        break;
+      case SelOp::ADJACENT:
+        the_node = the_node->predecessor;
+        if ((the_node == nullptr) || !match_simple_selector(*the_node, *sel_node)) return false;
+        break;
+      case SelOp::CHILD:
+        the_node = the_node->father;
+        if ((the_node == nullptr) || !match_simple_selector(*the_node, *sel_node)) return false;
+        break;
+      case SelOp::DESCENDANT:
+        the_node = the_node->father;
+        while (the_node != nullptr) {
+          if (match_simple_selector(*the_node, *sel_node)) break;
+          the_node = the_node->father;
+        }
+        if (the_node == nullptr) return false;
+        break;
+    }
+    op = sel_node->op;
+  }
+  return true;
+}
+
+void 
+CSS::match(DOM::Node * node, RulesMap & to_rules) 
 {
   for (auto & rule : rules_map) {
-    rule.first->show();
-    std::cout << std::endl;
+    if (match_selector(node, *rule.first)) {
+      to_rules[rule.first] = rule.second;
+    }
   }
 }
 
+void
+CSS::show(RulesMap & the_rules_map) 
+{
+  for (auto & rule : the_rules_map) {
+    rule.first->show();
+    std::cout << " {" << std::endl;
+    for (auto * prop : *rule.second) {
+      prop->show();
+    }
+    std::cout << "}" << std::endl;
+  }
+}

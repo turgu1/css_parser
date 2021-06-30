@@ -21,9 +21,7 @@ no more than 4 MBytes of available memory and supply "good enough" formatting of
 ## What remains to be done:
 
 - @import implementation in the CSS parser
-- CSS content ouput on stdout for debugging
-- a simplified DOM structure to allow for pattern matching of selectors
-- pattern maching selectors with the DOM for the CSS class
+- testing
 
 ## CSS class - Selector limitations:
 
