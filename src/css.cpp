@@ -135,7 +135,7 @@ CSS::match(DOM::Node * node, RulesMap & to_rules)
 {
   for (auto & rule : rules_map) {
     if (match_selector(node, *rule.first)) {
-      to_rules[rule.first] = rule.second;
+      to_rules.insert(std::pair<Selector *, Properties *>(rule.first, rule.second));
     }
   }
 }

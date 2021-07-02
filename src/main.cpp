@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <filesystem>
+#include <cstring> 
 
 #include "css.hpp"
 #include "dom.hpp"
@@ -62,22 +63,89 @@ const char * files[FILE_COUNT] = {
   "test/test11.css",
 };
 
-void test_dom()
+const char * css_test_str = 
+  R"END(
+    div.toto {
+        width: 25;
+    }
+
+    body {
+        margin-top: 10px;
+    }
+
+    h1 {
+        width: 25;
+        text-align: center;
+    }
+
+    body > h1 + p {
+        text-indent: 10px;
+        font-size: 20px;
+    }
+
+    p {
+      width: 15;
+    }
+
+    @font-face {
+        font-family: "Fontbase";
+        font-weight: normal;
+        font-style: normal;
+        src: url(Fonts/AveriaSerif-Light.ttf)
+        }
+    @font-face {
+        font-family: "SmallCaps";
+        font-weight: normal;
+        font-style: normal;
+        src: url(Fonts/Justus-Versalitas.ttf)
+        }
+    @font-face {
+        font-family: "Lettrines";
+        font-weight: normal;
+        font-style: normal;
+        src: url(Fonts/ELZEVIER_C.ttf)
+        }
+    @font-face {
+        font-family: "Ornements";
+        font-weight: normal;
+        font-style: normal;
+        src: url(Fonts/Swinging.ttf)
+        }
+  )END";
+
+void test()
 {
   DOM dom;
 
-  DOM::Node * div = dom.body->add_child(DOM::Tag::DIV)->add_id("the_div");
+  DOM::Node * div = dom.body->add_child(DOM::Tag::DIV)->add_id("the_div")->add_class("toto");
   div->add_child(DOM::Tag::H1);
-  div->add_child(DOM::Tag::P)->add_id("para1");
-  div->add_class("toto");
+  DOM::Node * p = div->add_child(DOM::Tag::P)->add_id("para1");
 
   dom.show();
+
+  DOM dom2;
+
+  CSS * css = new CSS("test", "./", css_test_str, strlen(css_test_str));
+  css->show();
+
+  CSS::RulesMap rm;
+  css->match(p, rm);
+
+  css->show(rm);
+
+  DOM::Node * ff_node = dom2.body->add_child(DOM::Tag::FONT_FACE);
+  CSS::RulesMap rm2;
+  css->match(ff_node, rm2);
+
+  css->show(rm2);
+  
+  delete css;
 }
 
 
 int main() {
 
-  test_dom();
+  test();
   return 0;
 
   int count = 0;

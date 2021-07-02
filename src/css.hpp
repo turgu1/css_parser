@@ -68,28 +68,28 @@
  *      counter-reset
  *      cursor
  *      direction
- *   *  display
+ *   *  display           not inherited  (inline)
  *      empty-cells
  *      float
  *      font
- *   *  font-family
- *   *  font-size
- *   *  font-style
+ *   *  font-family       yes              ?
+ *   *  font-size         yes            (medium)
+ *   *  font-style        yes            (normal)
  *      font-variant
- *   *  font-weight
- *   *  height
+ *   *  font-weight       yes            (normal)
+ *   *  height            not inherited  (auto)     
  *      left
  *      letter-spacing
- *   *  line-height
+ *   *  line-height       yes            (normal)
  *      list-style
  *      list-style-image
  *      list-style-position
  *      list-style-type
- *   *  margin
- *   *  margin-bottom
- *   *  margin-left
- *   *  margin-right
- *   *  margin-top
+ *   *  margin            not inherited  (0 0 0 0)
+ *   *  margin-bottom     not inherited  (0)
+ *   *  margin-left       not inherited  (0)
+ *   *  margin-right      not inherited  (0)
+ *   *  margin-top        not inherited  (0)
  *      max-height
  *      max-width
  *      min-height
@@ -112,15 +112,15 @@
  *      right
  *   *  src
  *      table-layout
- *   *  text-align
+ *   *  text-align           yes           (left)
  *      text-decoration
- *   *  text-indent
- *   *  text-transform
+ *   *  text-indent          yes           (0)
+ *   *  text-transform       yes           (none)
  *      top
  *      vertical-align
  *      visibility
  *      white-space
- *   *  width
+ *   *  width                not inherited (auto)
  *      word-spacing
  *      z-index
  */
@@ -179,13 +179,13 @@ class CSS
       union Specificity {
         uint32_t value;
         struct {
-          uint8_t order, tag_count, class_count, id_count;
+          uint8_t tag_count, class_count, id_count, priority;
         } spec;
         void show() const {
-          std::cout << "[" << +spec.id_count    << ","
+          std::cout << "[" << +spec.priority    << ","
+                           << +spec.id_count    << ","
                            << +spec.class_count << ","
-                           << +spec.tag_count   << ","
-                           << +spec.order 
+                           << +spec.tag_count
                            <<"]("
                            << value << ") ";
 
@@ -258,8 +258,8 @@ class CSS
         void add_selector_node(SelectorNode * node) {
           selector_node_list.push_front(node);
         }
-        void compute_specificity(uint8_t order) {
-          specificity.spec.order = order;
+        void compute_specificity(uint8_t prio) {
+          specificity.spec.priority = prio;
           for (auto * node : selector_node_list) {
             specificity.spec.tag_count   += (((node->tag == DOM::Tag::NONE) || (node->tag == DOM::Tag::ANY)) ? 0 : 1);
             specificity.spec.class_count += node->class_count;
@@ -359,7 +359,7 @@ class CSS
     // typedef std::list<Properties *>            PropertySuite;
     typedef std::forward_list<Properties *>    PropertySuiteList;
 
-    typedef std::map<Selector *, Properties *, rule_compare>  RulesMap;
+    typedef std::multimap<Selector *, Properties *, rule_compare>  RulesMap;
 
     RulesMap          rules_map;
     PropertySuiteList suites;     // Linear list of suites to be deleted when the instance will be destroyed.
@@ -372,6 +372,11 @@ class CSS
 
     void match(DOM::Node * node, RulesMap & to_rules);
     void show(RulesMap & the_rules_map);
+
+    void add_rule(Selector * sel, Properties * props) { 
+      rules_map.insert(std::pair<Selector *, Properties *>(sel, props)); 
+    }
+    void show() { show(rules_map); }
 
   private:
     bool match_simple_selector(DOM::Node & node, SelectorNode & simple_sel);

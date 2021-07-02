@@ -127,7 +127,7 @@ class CSSParser
 
     bool parse_url() {
       int16_t idx = 0;
-      while ((ch > ' ') && (idx < (STRING_SIZE - 1))) {
+      while ((ch > ' ') && (ch != ')') && (idx < (STRING_SIZE - 1))) {
         if ((ch == '"') || (ch == '\'') || (ch == '(')) {
           return false;
         }
@@ -726,7 +726,11 @@ class CSSParser
       }
     }
 
-    bool page_statement() {
+    bool page_statement() {  // Not implemented yet
+      skip_block();
+      return true;
+
+      #if 0
       skip_blanks();
       if (token == Token::COLON) {
         next_token();
@@ -744,20 +748,27 @@ class CSSParser
 
       } else return false;
       return true;
+      #endif
     }
 
     bool font_face_statement() {
+      CSS::Selectors sels;
+      CSS::Selector * sel = css.selector_pool.newElement();
+      CSS::SelectorNode * node = css.selector_node_pool.newElement();
+      node->tag = DOM::Tag::FONT_FACE;
+      sel->add_selector_node(node);
+      sel->compute_specificity(0);
+      sels.push_front(sel);
       skip_blanks();
       if (token == Token::LBRACE) {
         skip_blanks();
-        while (token == Token::IDENT) {
-          if (!declaration()) return false;
+        CSS::Properties * props = properties();
+        if (token == Token::RBRACE) {
+          skip_blanks();
+          return add_rules(sels, props);
         }
-        if (token == Token::RBRACE) skip_blanks();
-        else return false;
-
-      } else return false;
-      return true;
+      }
+      return false;
     }
     
     #if 0  // Not supported yet
@@ -884,9 +895,10 @@ class CSSParser
         while (true) {
           if (token == Token::WHITESPACE) skip_blanks();
           if ((token == Token::PLUS) || (token == Token::GT)) {
+            Token t = token;
             skip_blanks();
             if (((node = selector_node())) == nullptr) break;
-            node->op = (token == Token::PLUS) ? CSS::SelOp::ADJACENT : CSS::SelOp::CHILD;
+            node->op = (t == Token::PLUS) ? CSS::SelOp::ADJACENT : CSS::SelOp::CHILD;
             sel->add_selector_node(node);
           }
           else if ((token == Token::IDENT ) ||
@@ -909,10 +921,7 @@ class CSSParser
       }
       if (done) {
         if (!sel->is_empty()) {
-          sel->compute_specificity(sel_nbr++);
-          // std::cout << "Selector: ";
-          // sel->show();
-          // std::cout << std::endl;
+          sel->compute_specificity(0);
           return sel;
         }
         else {
@@ -926,9 +935,32 @@ class CSSParser
       }
     }
 
+    CSS::Properties * properties() {
+      CSS::Properties * props = css.properties_pool.newElement();
+      CSS::Property * property;
+      while (token == Token::IDENT) {
+        if (((property = declaration())) != nullptr) props->push_front(property);
+      }
+      return props;
+    }
+
+    bool add_rules(CSS::Selectors & sels, CSS::Properties * props) {
+      if (props->empty()) {
+        for (auto * sel : sels) {
+          for (auto * node : sel->selector_node_list) css.selector_node_pool.deleteElement(node);
+        }
+        css.properties_pool.deleteElement(props);
+        return false;
+      }
+      else {
+        for (auto * sel : sels) css.add_rule(sel, props);
+        css.suites.push_front(props);
+      }
+      return true;
+    }
+    
     bool ruleset() {
       CSS::Selectors selectors; // multiple selectors can be associated to a property list 
-      CSS::Property * property;
       CSS::Selector * sel;
       if (((sel = selector())) != nullptr) selectors.push_back(sel);
       else while ((token != Token::END_OF_FILE) && (token != Token::COMMA) && (token != Token::LBRACE)) next_token();
@@ -937,34 +969,18 @@ class CSSParser
         if (((sel = selector())) != nullptr) selectors.push_back(sel);
         else while ((token != Token::END_OF_FILE) && (token != Token::COMMA) && (token != Token::LBRACE)) next_token();
       }
-      if (selectors.empty()) { skip_block(); return false; }
-      if (token == Token::LBRACE) {
-        CSS::Properties * properties = css.properties_pool.newElement();
+      if (selectors.empty()) { 
+        skip_block();
+      }
+      else if (token == Token::LBRACE) {
         skip_blanks();
-        while (token == Token::IDENT) {
-          if (((property = declaration())) != nullptr) properties->push_front(property);
-        }
-        if (token == Token::RBRACE) skip_blanks();
-        else return false;
-        if (properties->empty()) {
-          for (auto * sel : selectors) {
-            for (auto * node : sel->selector_node_list) {
-              css.selector_node_pool.deleteElement(node);
-            }
-          }
-          css.properties_pool.deleteElement(properties);
-          return false;
-        }
-        else {
-          for (auto * sel : selectors) {
-            css.rules_map[sel] = properties;
-          }
-          css.suites.push_front(properties);
-
+        CSS::Properties * props = properties();
+        if (token == Token::RBRACE) {
+          skip_blanks();
+          return add_rules(selectors, props);
         }
       }
-
-      return true;
+      return false;
     }
 
     #if 0

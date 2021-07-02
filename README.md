@@ -15,8 +15,7 @@ The following are the main differences from the 2.1 grammar:
 
 - First cut of the @media extension (not used)
 
-The main objective is to have a combined CSS class and CSS parser suitable to include in an EPUB reader that fits on very small reader devices with
-no more than 4 MBytes of available memory and supply "good enough" formatting of pages.
+The main objective is to have a combined CSS class and CSS parser suitable to include in an EPUB reader that fits on very small reader devices with no more than 4 MBytes of available memory, and supply "good enough" formatting of pages.
 
 ## What remains to be done:
 

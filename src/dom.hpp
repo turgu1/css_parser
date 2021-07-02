@@ -17,10 +17,11 @@ class DOM
     // rules to the one that uses only these tags.
     //
     // The pseudo tags NONE and ANY are for selector definition, when no tag is identified 
-    // in the selector or the '*' selector is used.
+    // in the selector or the '*' selector is used. The pseudo tag FONT_FACE is to grab
+    // @font-face definitions in the rules-set. Same for @page vs PAGE.
     enum class Tag : uint8_t { NONE, BODY, P, LI, BREAK, H1, H2, H3, H4, H5, H6, 
                                B, I, A, IMG, IMAGE, EM, DIV, SPAN, PRE,
-                               BLOCKQUOTE, STRONG, ANY };
+                               BLOCKQUOTE, STRONG, ANY, FONT_FACE, PAGE };
 
     typedef std::map<std::string, Tag> Tags;
 
@@ -45,7 +46,7 @@ class DOM
         tag    = the_tag;
         if (father != nullptr) {
           first_child = father->children.empty();
-          predecessor = first_child ? nullptr : children.front();
+          predecessor = first_child ? nullptr : father->children.front();
           father->children.push_front(this);    
         }
         else first_child = true;
